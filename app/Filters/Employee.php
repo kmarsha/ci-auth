@@ -27,7 +27,9 @@ class Employee implements FilterInterface
     {
         $role = session()->get('role');
 
-        if ($role != 'karyawan') {
+        if ($role == null) {
+            return redirect()->route('login')->with('error', 'Belum Login!');
+        } elseif ($role != 'karyawan') {
             return redirect()->back()->with('error', 'Kamu bukan Karyawan!');
         }
     }

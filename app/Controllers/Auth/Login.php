@@ -24,25 +24,29 @@ class Login extends BaseController
 
         $user = $this->model->where('username', $username)->first();
 
-        $verify_pass = password_verify($password, $user->password);
+        if ($user != null) {
+            $verify_pass = password_verify($password, $user->password);
 
-        if ($verify_pass) {
-            $data_session = [
-                'isLogin' => true,
-                'username' => $username,
-                'role' => $user->role,
-            ];
-            session()->set($data_session);
+            if ($verify_pass) {
+                $data_session = [
+                    'isLogin' => true,
+                    'username' => $username,
+                    'role' => $user->role,
+                ];
+                session()->set($data_session);
 
-            if ($user->role == 'admin') {
-                $route = 'admin';
-            } elseif ($user->role == 'karyawan') {
-                $route = 'employee';
+                if ($user->role == 'admin') {
+                    $route = 'admin';
+                } elseif ($user->role == 'karyawan') {
+                    $route = 'employee';
+                }
+
+                return redirect()->route($route)->with('success', 'Berhasil Login!');
+            } else {
+                return redirect()->back()->withInput()->with('error', 'Password salah!');
             }
-
-            return redirect()->route($route)->with('success', 'Berhasil Login!');
         } else {
-            return redirect()->back()->withInput()->with('error', 'Password salah!');
+                return redirect()->back()->withInput()->with('error', 'Tidak ada Username terdaftar!');
         }
     }
 

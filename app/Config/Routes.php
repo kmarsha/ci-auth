@@ -41,14 +41,12 @@ $routes->get('/user', 'Home::user', ['as' => 'users']);
 
 // filter declared in app/Config/Filter $aliases
 // accessed by guest user
-$routes->group('', ['filter' => 'guest'], function ($routes) {
-    $routes->group('', ['namespace' => 'App\Controllers\Auth'], function($routes) {
+$routes->group('', ['filter' => 'guest', 'namespace' => 'App\Controllers\Auth'], function($routes) {
         $routes->get('/register', 'Register::index', ['as' => 'reg-view']);
         $routes->post('/register', 'Register::auth', ['as' => 'registering']);
 
         $routes->get('/login', 'Login::index', ['as' => 'log-view']);
         $routes->post('/login', 'Login::auth', ['as' => 'login']);
-    });
 });
 
 // accessed by authenticate user

@@ -27,7 +27,9 @@ class Admin implements FilterInterface
     {
         $role = session()->get('role');
 
-        if ($role != 'admin') {
+        if ($role == null) {
+            return redirect()->route('login')->with('error', 'Belum Login!');
+        } elseif ($role != 'admin') {
             return redirect()->back()->with('error', 'Kamu bukan Admin!');
         }
     }
